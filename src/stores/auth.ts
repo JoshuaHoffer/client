@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
   const showConnectModal = ref(false)
   const user = ref<User | null>(null)
   const walletConnection = ref<WalletConnection | null>(null)
+  const isInitialized = ref(false)
 
   // Getters
   const isAuthenticated = computed(() => !!user.value && !!walletConnection.value?.isConnected)
@@ -16,6 +17,20 @@ export const useAuthStore = defineStore('auth', () => {
   const isManager = computed(() => user.value?.role === 'manager')
 
   // Actions
+  const initializeAuth = async (): Promise<void> => {
+    if (isInitialized.value) return
+
+    try {
+      isLoading.value = true
+      await restoreSession()
+      isInitialized.value = true
+    } catch (error) {
+      console.error('Auth initialization failed:', error)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const connectWallet = async (walletType: string): Promise<void> => {
     isLoading.value = true
 
@@ -115,14 +130,11 @@ export const useAuthStore = defineStore('auth', () => {
         isConnected: true
       }
 
-      // Restore user data
-      user.value = {
-        id: `user_${connectionData.address}`,
-        address: connectionData.address,
-        role: connectionData.address.endsWith('1') ? 'manager' : 'investor',
-        balance: 1250.50,
-        joinedAt: new Date(connectionData.timestamp),
-        preferences: {
+      // Restore user data (including preferences from localStorage if available)
+      const storedPreferences = localStorage.getItem('user_preferences')
+      const preferences = storedPreferences
+        ? JSON.parse(storedPreferences)
+        : {
           dividendPayout: 'reinvest',
           reinvestmentPercentage: 70,
           notifications: {
@@ -133,12 +145,21 @@ export const useAuthStore = defineStore('auth', () => {
             priceAlerts: false
           }
         }
+
+      user.value = {
+        id: `user_${connectionData.address}`,
+        address: connectionData.address,
+        role: connectionData.address.endsWith('1') ? 'manager' : 'investor',
+        balance: 1250.50,
+        joinedAt: new Date(connectionData.timestamp),
+        preferences
       }
 
     } catch (error) {
       console.error('Session restoration failed:', error)
       // Clear corrupted data
       localStorage.removeItem('wallet_connection')
+      localStorage.removeItem('user_preferences')
     }
   }
 
@@ -186,6 +207,45 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // New method to get user balance with currency conversion
+  const getBalanceInCurrency = (currency: string = 'USD'): number => {
+    if (!user.value) return 0
+
+    // Mock currency conversion rates
+    const conversionRates: Record<string, number> = {
+      'USD': 1,
+      'EUR': 0.85,
+      'GBP': 0.73,
+      'ETH': 0.0004,
+      'BTC': 0.000025
+    }
+
+    const rate = conversionRates[currency.toUpperCase()] || 1
+    return user.value.balance * rate
+  }
+
+  // Method to load additional user data
+  const loadUserData = async (): Promise<void> => {
+    if (!user.value) return
+
+    isLoading.value = true
+
+    try {
+      // Simulate API call to refresh user data
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      // In a real app, this would fetch fresh data from the API
+      // For now, we'll just update the balance with some mock variation
+      const balanceVariation = (Math.random() - 0.5) * 100 // +/- $50 variation
+      user.value.balance = Math.max(0, user.value.balance + balanceVariation)
+
+    } catch (error) {
+      console.error('Failed to load user data:', error)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   // Helper functions
   const generateMockAddress = (walletType: string): string => {
     const prefixes = {
@@ -205,6 +265,7 @@ export const useAuthStore = defineStore('auth', () => {
     showConnectModal,
     user,
     walletConnection,
+    isInitialized,
 
     // Getters
     isAuthenticated,
@@ -213,10 +274,13 @@ export const useAuthStore = defineStore('auth', () => {
     isManager,
 
     // Actions
+    initializeAuth,
     connectWallet,
     disconnect,
     restoreSession,
     updateUserPreferences,
-    switchNetwork
+    switchNetwork,
+    getBalanceInCurrency,
+    loadUserData
   }
 })

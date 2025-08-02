@@ -26,7 +26,7 @@
 
     <!-- Summary Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+      <div class="bg-white rounded-lg shadow-md border-l-4 border-green-500" style="padding: 1.5rem;">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Active Bots</p>
@@ -36,7 +36,7 @@
         </div>
       </div>
       
-      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+      <div class="bg-white rounded-lg shadow-md border-l-4 border-blue-500" style="padding: 1.5rem;">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">24h Profit</p>
@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+      <div class="bg-white rounded-lg shadow-md border-l-4 border-purple-500" style="padding: 1.5rem;">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Total Trades</p>
@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+      <div class="bg-white rounded-lg shadow-md border-l-4 border-orange-500" style="padding: 1.5rem;">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600">Win Rate</p>
@@ -75,7 +75,7 @@
     </div>
 
     <!-- Filters and Search -->
-    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+    <div class="bg-white rounded-lg shadow-md mb-6" style="padding: 1rem;">
       <div class="flex flex-wrap gap-4 items-center">
         <div class="flex-1 min-w-64">
           <div class="relative">
@@ -112,7 +112,7 @@
         class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         
         <!-- Bot Header -->
-        <div class="p-6 pb-4">
+        <div style="padding: 1.5rem; padding-bottom: 1rem;">
           <div class="flex justify-between items-start mb-3">
             <div>
               <h3 class="text-lg font-semibold text-gray-900">{{ bot.name }}</h3>
@@ -142,7 +142,7 @@
         </div>
 
         <!-- Bot Metrics -->
-        <div class="px-6 pb-4">
+        <div style="padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: 1rem;">
           <div class="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p class="text-gray-600">24h Profit</p>
@@ -174,14 +174,14 @@
         </div>
 
         <!-- Bot Performance Chart -->
-        <div class="px-6 pb-4">
+        <div style="padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: 1rem;">
           <div class="h-32 bg-gray-50 rounded flex items-center justify-center">
             <canvas :id="'chart-' + bot.id" width="200" height="80"></canvas>
           </div>
         </div>
 
         <!-- Bot Actions -->
-        <div v-if="userRole === 'manager'" class="px-6 py-4 bg-gray-50 border-t">
+        <div v-if="userRole === 'manager'" class="bg-gray-50 border-t" style="padding: 1.5rem; padding-top: 1rem; padding-bottom: 1rem;">
           <div class="flex space-x-2">
             <button 
               @click="configureBot(bot)"
@@ -202,7 +202,7 @@
 
     <!-- Add Bot Modal -->
     <div v-if="showAddBotModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <div class="bg-white rounded-lg max-w-md w-full mx-4" style="padding: 1.5rem;">
         <h3 class="text-lg font-semibold mb-4">Add New Trading Bot</h3>
         <form @submit.prevent="addBot">
           <div class="space-y-4">
@@ -257,7 +257,7 @@
 
     <!-- Bot Configuration Modal -->
     <div v-if="showConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+      <div class="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-y-auto" style="padding: 1.5rem;">
         <h3 class="text-lg font-semibold mb-4">Configure {{ selectedBot?.name }}</h3>
         <div class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
@@ -303,7 +303,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { 
   Plus, RefreshCw, Activity, DollarSign, BarChart3, Target, Search, 
   TrendingUp, TrendingDown, Pause, Play, Settings, Eye 
@@ -549,7 +549,7 @@ watch([filteredBots], () => {
 
 <style scoped>
 .trading-bots-view {
-  @apply p-6;
+  padding: 1.5rem;
 }
 
 canvas {

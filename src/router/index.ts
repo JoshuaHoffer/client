@@ -10,13 +10,13 @@ import Dividends from '@/views/DividendsView.vue'
 import TradingBots from '@/views/TradingBots.vue'
 import Admin from '@/views/AdminView.vue'
 
-// Auth views
+// // Auth views
 import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue'
 
-// Error views
-import NotFound from '@/views/errors/NotFound.vue'
-import Unauthorized from '@/views/errors/Unauthorized.vue'
+// // Error views
+// import NotFound from '@/views/errors/NotFound.vue'
+// import Unauthorized from '@/views/errors/Unauthorized.vue'
 
 const routes = [
   // Root redirect
@@ -201,62 +201,62 @@ const routes = [
     }
   },
 
-  {
-    path: '/transactions/:id',
-    name: 'TransactionDetail',
-    component: () => import('@/views/TransactionDetail.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Transaction Details - Tesseract Fund',
-      breadcrumb: 'Transaction Details'
-    }
-  },
+  // {
+  //   path: '/transactions/:id',
+  //   name: 'TransactionDetail',
+  //   component: () => import('@/views/TransactionDetail.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //     title: 'Transaction Details - Tesseract Fund',
+  //     breadcrumb: 'Transaction Details'
+  //   }
+  // },
 
   // Bot management routes
-  {
-    path: '/bots/:id',
-    name: 'BotDetail',
-    component: () => import('@/views/BotDetail.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Bot Details - Tesseract Fund',
-      breadcrumb: 'Bot Details'
-    }
-  },
+  // {
+  //   path: '/bots/:id',
+  //   name: 'BotDetail',
+  //   component: () => import('@/views/BotDetail.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //     title: 'Bot Details - Tesseract Fund',
+  //     breadcrumb: 'Bot Details'
+  //   }
+  // },
 
-  {
-    path: '/bots/:id/configure',
-    name: 'BotConfigure',
-    component: () => import('@/views/BotConfigure.vue'),
-    meta: {
-      requiresAuth: true,
-      requiresManager: true,
-      title: 'Configure Bot - Tesseract Fund',
-      breadcrumb: 'Configure Bot'
-    }
-  },
+  // {
+  //   path: '/bots/:id/configure',
+  //   name: 'BotConfigure',
+  //   component: () => import('@/views/BotConfigure.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //     requiresManager: true,
+  //     title: 'Configure Bot - Tesseract Fund',
+  //     breadcrumb: 'Configure Bot'
+  //   }
+  // },
 
-  // Error routes
-  {
-    path: '/unauthorized',
-    name: 'Unauthorized',
-    component: Unauthorized,
-    meta: {
-      title: 'Unauthorized - Tesseract Fund',
-      hideNavigation: true
-    }
-  },
+  // // Error routes
+  // {
+  //   path: '/unauthorized',
+  //   name: 'Unauthorized',
+  //   component: Unauthorized,
+  //   meta: {
+  //     title: 'Unauthorized - Tesseract Fund',
+  //     hideNavigation: true
+  //   }
+  // },
 
-  // 404 catch-all
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound,
-    meta: {
-      title: 'Page Not Found - Tesseract Fund',
-      hideNavigation: true
-    }
-  }
+  // // 404 catch-all
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   name: 'NotFound',
+  //   component: NotFound,
+  //   meta: {
+  //     title: 'Page Not Found - Tesseract Fund',
+  //     hideNavigation: true
+  //   }
+  // }
 ]
 
 const router = createRouter({
@@ -282,25 +282,25 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Check if route requires authentication
-  if (to.meta.requiresAuth) {
-    if (!authStore.isAuthenticated) {
-      // Redirect to login with return URL
-      return next({
-        name: 'Login',
-        query: { redirect: to.fullPath }
-      })
-    }
+  // if (to.meta.requiresAuth) {
+  //   if (!authStore.isAuthenticated) {
+  //     // Redirect to login with return URL
+  //     return next({
+  //       name: 'Login',
+  //       query: { redirect: to.fullPath }
+  //     })
+  //   }
 
-    // Check if route requires manager role
-    if (to.meta.requiresManager && !authStore.isManager) {
-      return next({ name: 'Unauthorized' })
-    }
-  }
+  //   // Check if route requires manager role
+  //   if (to.meta.requiresManager && !authStore.isManager) {
+  //     return next({ name: 'Unauthorized' })
+  //   }
+  // }
 
-  // Redirect authenticated users away from guest-only routes
-  if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    return next({ name: 'Dashboard' })
-  }
+  // // Redirect authenticated users away from guest-only routes
+  // if (to.meta.requiresGuest && authStore.isAuthenticated) {
+  //   return next({ name: 'Dashboard' })
+  // }
 
   // Continue navigation
   next()

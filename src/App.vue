@@ -182,7 +182,7 @@ const navigationItems = computed(() => {
 
 const userInitials = computed(() => {
   const name = authStore.userName
-  return name.split(' ').map(n => n[0]).join('').toUpperCase()
+  return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : ''
 })
 
 // Methods
